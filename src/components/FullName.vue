@@ -15,10 +15,10 @@ const reverseString = (str: string): string => {
 export default class FullName extends Vue {
   reversed = false;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   private readonly firstName!: string;
 
-  @Prop({ default: '' })
+  @Prop({ type: String, default: '' })
   private readonly lastName?: string;
 
   get fullName(): string {

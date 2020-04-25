@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <FullName ref="fullName" first-name="James" last-name="Bond" />
+    <FullName ref="fullName" first-name="James" :last-name="'Bond'" />
     <button @click="reverseFullName">Reverse full name</button>
   </div>
 </template>

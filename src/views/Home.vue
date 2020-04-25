@@ -4,7 +4,7 @@
 
     <div class="action" style="margin-top: 20px;">
       <button @click="reverseFullName">Reverse full name</button>
-      <button @click="changeLastName">Change last name to Bond</button>
+      <button @click="changeLastName">Change last name</button>
     </div>
 
   </div>
@@ -20,18 +20,14 @@ import FullName from '@/components/FullName.vue';
   }
 })
 export default class Home extends Vue {
-  lastName?: string = '';
+  lastName?: string = 'Jones';
 
   $refs!: {
     fullName: FullName;
   }
 
-  created(): void {
-    this.lastName = 'Jones';
-  }
-
   changeLastName(): void {
-    this.lastName = 'Bond';
+    this.lastName = (this.lastName === 'Jones') ? 'Bond' : 'Jones';
   }
 
   reverseFullName(): void {

@@ -13,7 +13,7 @@ const reverseString = (str: string): string => {
 
 @Component
 export default class FullName extends Vue {
-  reversed = false;
+  private reversed = false;
 
   @Prop({ type: String, required: true })
   private readonly firstName!: string;
@@ -21,7 +21,7 @@ export default class FullName extends Vue {
   @Prop({ type: String, default: '' })
   private readonly lastName?: string;
 
-  get fullName(): string {
+  private get fullName(): string {
     let name = this.firstName;
     if (this.lastName) {
       name += ` ${this.lastName}`;
@@ -29,7 +29,7 @@ export default class FullName extends Vue {
     return (this.reversed) ? reverseString(name) : name;
   }
 
-  public reverse(): void {
+  reverse(): void {
     this.reversed = !this.reversed;
   }
 

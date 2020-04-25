@@ -1,7 +1,12 @@
 <template>
   <div class="home">
-    <FullName ref="fullName" first-name="James" :last-name="'Bond'" />
-    <button @click="reverseFullName">Reverse full name</button>
+    <FullName ref="fullName" first-name="James" :last-name="lastName" />
+
+    <div class="action" style="margin-top: 20px;">
+      <button @click="reverseFullName">Reverse full name</button>
+      <button @click="changeLastName">Change last name to Bond</button>
+    </div>
+
   </div>
 </template>
 
@@ -15,8 +20,18 @@ import FullName from '@/components/FullName.vue';
   }
 })
 export default class Home extends Vue {
+  lastName?: string = '';
+
   $refs!: {
     fullName: FullName;
+  }
+
+  created(): void {
+    this.lastName = 'Jones';
+  }
+
+  changeLastName(): void {
+    this.lastName = 'Bond';
   }
 
   reverseFullName(): void {

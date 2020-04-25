@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
 const reverseString = (str: string): string => {
   return str.split('').reverse().join('');
@@ -27,6 +27,11 @@ export default class FullName extends Vue {
       name += ` ${this.lastName}`;
     }
     return (this.reversed) ? reverseString(name) : name;
+  }
+
+  @Watch('lastName', { immediate: true })
+  handleLastNameChange(newVal: string, oldVal: string) {
+    console.log(`last name has been changed from "${oldVal}" to "${newVal}"`)
   }
 
   reverse(): void {

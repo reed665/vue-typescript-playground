@@ -1,11 +1,17 @@
 <template>
   <div class="full-name">
-    <div class="first-name">{{ fullName }}</div>
+    <p>{{ fullName }}</p>
+
+    <div class="actions">
+      <button @click="$emit('reset-name')">Reset name</button>
+      <button @click="switchNames">Switch first and last names</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Person } from '@/helpers';
 
 const reverseString = (str: string): string => {
   return str.split('').reverse().join('');
@@ -38,5 +44,21 @@ export default class FullName extends Vue {
     this.reversed = !this.reversed;
   }
 
+  @Emit('switch-names')
+  switchNames() {
+    const person: Person = {
+      firstName: this.lastName || '',
+      lastName: this.firstName,
+    }
+    return person;
+  }
+
 }
 </script>
+
+<style lang="scss" scoped>
+.full-name {
+  padding: 10px;
+  background: lightgoldenrodyellow;
+}
+</style>

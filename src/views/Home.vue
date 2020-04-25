@@ -1,6 +1,12 @@
 <template>
   <div class="home">
-    <FullName ref="fullName" first-name="James" :last-name="lastName" />
+    <FullName
+      ref="fullName"
+      :first-name="firstName"
+      :last-name="lastName"
+      @reset-name="handleResetName"
+      @switch-names="handleSwitchNames"
+    />
 
     <div class="action" style="margin-top: 20px;">
       <button @click="reverseFullName">Reverse full name</button>
@@ -13,6 +19,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import FullName from '@/components/FullName.vue';
+import { Person } from '@/helpers';
 
 @Component({
   components: {
@@ -20,10 +27,15 @@ import FullName from '@/components/FullName.vue';
   }
 })
 export default class Home extends Vue {
-  lastName?: string = 'Jones';
+  firstName = '';
+  lastName = '';
 
   $refs!: {
     fullName: FullName;
+  }
+
+  created() {
+    this.setDefaultName();
   }
 
   changeLastName(): void {
@@ -32,6 +44,20 @@ export default class Home extends Vue {
 
   reverseFullName(): void {
     this.$refs.fullName.reverse();
+  }
+
+  private setDefaultName() {
+    this.firstName = 'James';
+    this.lastName = 'Jones';
+  }
+
+  handleResetName() {
+    this.setDefaultName();
+  }
+
+  handleSwitchNames(person: Person) {
+    this.firstName = person.firstName;
+    this.lastName = person.lastName || '';
   }
 
 }

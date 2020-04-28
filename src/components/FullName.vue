@@ -10,50 +10,60 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Emit } from 'vue-property-decorator';
+import { defineComponent, ref, computed } from '@vue/composition-api';
 import { Person } from '@/helpers';
 
 const reverseString = (str: string): string => {
   return str.split('').reverse().join('');
 }
 
-@Component
-export default class FullName extends Vue {
-  private reversed = false;
-
-  @Prop({ type: String, required: true })
-  private readonly firstName!: string;
-
-  @Prop({ type: String, default: '' })
-  private readonly lastName?: string;
-
-  private get fullName(): string {
-    let name = this.firstName;
-    if (this.lastName) {
-      name += ` ${this.lastName}`;
-    }
-    return (this.reversed) ? reverseString(name) : name;
-  }
-
-  @Watch('lastName', { immediate: true })
-  handleLastNameChange(newVal: string, oldVal: string) {
-    console.log(`last name has been changed from "${oldVal}" to "${newVal}"`)
-  }
-
-  reverse(): void {
-    this.reversed = !this.reversed;
-  }
-
-  @Emit('switch-names')
-  switchNames() {
-    const person: Person = {
-      firstName: this.lastName || '',
-      lastName: this.firstName,
-    }
-    return person;
-  }
-
+export interface FullNamePublicMethods {
+  reverse: () => void;
 }
+
+export default defineComponent({
+  props: {
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      default: ''
+    }
+  },
+
+  setup(props, context) {
+    const reversed = ref(false)
+
+    const reverse = (): void => {
+      reversed.value = !reversed.value;
+    }
+
+    const fullName = computed(() => {
+      let name = props.firstName;
+      if (props.lastName) {
+        name += ` ${props.lastName}`;
+      }
+      return reversed.value ? reverseString(name) : name;
+    })
+
+    const switchNames = () => {
+      const person: Person = {
+        firstName: props.lastName,
+        lastName: props.firstName,
+      }
+      context.emit('switch-names', person);
+    }
+
+    return {
+      fullName,
+      reverse,
+      switchNames,
+    }
+  }
+
+})
 </script>
 
 <style lang="scss" scoped>

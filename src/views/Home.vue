@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <FullName
-      ref="fullName"
+      ref="fullNameRef"
       :first-name="firstName"
       :last-name="lastName"
       @reset-name="handleResetName"
@@ -17,48 +17,56 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import FullName from '@/components/FullName.vue';
+import { defineComponent, ref } from '@vue/composition-api';
+import FullName, { FullNamePublicMethods } from '@/components/FullName.vue';
 import { Person } from '@/helpers';
 
-@Component({
+export default defineComponent({
   components: {
     FullName,
+  },
+
+  setup() {
+    const firstName = ref('')
+    const lastName = ref('')
+
+    const fullNameRef = ref<FullNamePublicMethods>(null)
+
+    const setDefaultName = () => {
+      firstName.value = 'James';
+      lastName.value = 'Bond';
+    }
+
+    setDefaultName()
+
+    const handleResetName = () => {
+      setDefaultName()
+    }
+
+    const handleSwitchNames = (person: Person) => {
+      firstName.value = person.firstName;
+      lastName.value = person.lastName;
+    }
+
+    const reverseFullName = () => {
+      fullNameRef.value?.reverse()
+    }
+
+    const changeLastName = () => {
+      lastName.value = (lastName.value === 'Bond') ? 'Jones' : 'Bond';
+    }
+
+    return {
+      firstName,
+      lastName,
+      fullNameRef,
+      reverseFullName,
+      changeLastName,
+      handleResetName,
+      handleSwitchNames,
+    }
   }
+
 })
-export default class Home extends Vue {
-  firstName = '';
-  lastName = '';
 
-  $refs!: {
-    fullName: FullName;
-  }
-
-  created() {
-    this.setDefaultName();
-  }
-
-  changeLastName(): void {
-    this.lastName = (this.lastName === 'Jones') ? 'Bond' : 'Jones';
-  }
-
-  reverseFullName(): void {
-    this.$refs.fullName.reverse();
-  }
-
-  private setDefaultName() {
-    this.firstName = 'James';
-    this.lastName = 'Jones';
-  }
-
-  handleResetName() {
-    this.setDefaultName();
-  }
-
-  handleSwitchNames(person: Person) {
-    this.firstName = person.firstName;
-    this.lastName = person.lastName || '';
-  }
-
-}
 </script>

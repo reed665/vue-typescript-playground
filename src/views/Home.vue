@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
-import FullName, { FullNamePublicMethods } from '@/components/FullName.vue';
+import FullName, { FullNameAPI } from '@/components/FullName.vue';
 import { Person } from '@/helpers';
 
 export default defineComponent({
@@ -30,7 +30,7 @@ export default defineComponent({
     const firstName = ref('')
     const lastName = ref('')
 
-    const fullNameRef = ref<FullNamePublicMethods>(null)
+    const fullNameRef = ref<FullNameAPI>(null)
 
     const setDefaultName = () => {
       firstName.value = 'James';

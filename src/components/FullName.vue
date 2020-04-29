@@ -17,7 +17,7 @@ const reverseString = (str: string): string => {
   return str.split('').reverse().join('');
 }
 
-export interface FullNamePublicMethods {
+export interface FullNameAPI {
   reverse: () => void;
 }
 
@@ -56,11 +56,19 @@ export default defineComponent({
       context.emit('switch-names', person);
     }
 
-    return {
+    const privateAPI = {
       fullName,
-      reverse,
-      switchNames,
+      switchNames
     }
+
+    const publicAPI: FullNameAPI = {
+      reverse
+    }
+
+    return {
+      ...privateAPI,
+      ...publicAPI
+    };
   }
 
 })
